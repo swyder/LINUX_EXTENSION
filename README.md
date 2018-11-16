@@ -1,6 +1,3 @@
-tmux
-
-
 ### University of Zurich
 ### URPP Evolution in Action
 ![URPP logo](Logo_URPP_kl2.png)
@@ -31,12 +28,12 @@ Exercises | CB&SW
 ## connecting to a remote host, transferring files
 
 **Command** | **Task**
+------------|----------
 ssh -X *user*@*hostname* | Connect to server
 scp \<what\> \<towhere\> | Transfer file from/to server
 sftp *user*@*hostname* | Transfer file from/to server
 
-ssh ("secure shell") is a secure protocol for remote login and also for executing commands in a remote machin
-e. To connect to a remote machine using ssh, simply type:
+ssh ("secure shell") is a secure protocol for remote login and also for executing commands in a remote machine. To connect to a remote machine using ssh, simply type:
 ```
 ssh -X username@hostname
 ```
@@ -50,12 +47,14 @@ you can work with the remote machine in the same way as you work on your local m
 For Windows often used ssh clients are PuTTY and MobaXterm.  
 
 For easier login and increased security use [Public key authentication](https://help.ubuntu.com/community/SSH/OpenSSH/Keys).  
-
+  
+  
+`scp` is for secure file copying.
 ```
 scp -p -r *.py username@hostname:~/mnt/mnemo2/scripts/
 ```
 copies all python scripts of the current directory (`*.py`) including all subfolders (`-r`) to a specific directory (~/mnt/mnemo2/scripts/) on the server.
-The `-p` preserves the modification time so that the copied files have the same timestamp than the source.
+The `-p` preserves the modification time so that the copied files have the same timestamp than the original files.
 
 ## Running jobs in the background
 
@@ -69,24 +68,27 @@ cp * /tmp/ &
 We can put unintentionally long jobs to the background:  
 
 1. `ctrl-z` suspends the running program
-2. `bg` runs suspended program to the background
+2. `bg` runs suspended program to the background  
+  
 
+## Exit a running shell session without stopping running jobs
 
-check jobs using jobs and bring back to foreground fg (No more killing a long running process)
-
-
-## Running a job that is continueing when logging out
-
-exit a running shell session without stopping running jobs
-By default, all running jobs are stopped when we exit a shelle session (log out or when the connection is interrupted)
+By default, all running jobs are stopped when we exit a shell session (log out or when the connection is interrupted). This is can be a problem for long jobs.
 ```
 nohup long_running command &
 ```
 will run it and save the output to `nohup.log`.  
+  
+
+Alternatively, runs the long_running command and saves the output to log.bwa:  
+```
+nohup long_running command 2>log.bwa &
+```
 
 ### advanced
-  
-it is possible to detach a running process using `disown`.
+
+- You can check jobs using `jobs` and also bring them back to foreground using `fg`.  
+- Another way to detach a running process is to use `disown`.
 
 
 ### screen and tmux
@@ -143,6 +145,7 @@ Find more information a detailed example [here](https://www.rackaid.com/blog/lin
 
 ## Running screen directly from SSH
 
+command                       | explanation
 ----------------------------- | --------------------
 ssh -t username@server screen | login and run screen on server
 ssh -t username@server screen -r | login and directly resume session (if there is only one)
@@ -158,3 +161,13 @@ It is also possible to create and use multiple windows within the same SSH sessi
 2. Let's check whether we have running screen or not: `screen -ls`
 3. No screen found. Let's create a new screen: `screen`. Press enter to close the welcome screen.
 4. 
+
+
+## [tmux](https://github.com/tmux/tmux/wiki) https://github.com/tmux/tmux/wiki
+
+Many people think of tmux, a so-called terminal multiplexer, as an easier-to-use and a little more powerful alternative to Screen.
+  
+It lets you switch easily between several programs in one terminal, detach them (they keep running in the background) and reattach them to a different terminal. It also provides vertical and horizontal window split support.  
+  
+- a tmux [crash course](https://robots.thoughtbot.com/a-tmux-crash-course)
+- another [guide](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/)
