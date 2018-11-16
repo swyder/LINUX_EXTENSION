@@ -20,7 +20,10 @@ Aliases | CB
 Software installation and troubleshooting | CB
 Parallel GNU | CB
 Sending jobs to the cluster | CB
-Exercises | CB&SW
+Exercises | CB&SW  
+  
+  
+[Carla's material](https://github.com/carlalbc/URPP_tutorials/blob/master/Linux_command_line_II/PartII_Aliases_installation_and_parallel.md)
 
 
 ## Interacting with servers / cluster / remote computers
