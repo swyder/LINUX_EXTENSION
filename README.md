@@ -59,19 +59,22 @@ scp -p -r *.py username@hostname:~/mnt/mnemo2/scripts/
 copies all python scripts of the current directory (`*.py`) including all subfolders (`-r`) to a specific directory (~/mnt/mnemo2/scripts/) on the server.
 The `-p` preserves the modification time so that the copied files have the same timestamp than the original files.
 
+
 ## Running jobs in the background
 
 By default, the terminal is blocked until the job is finished.
 
-ampersand `&` at the end of your command -- it runs in the background and notifies you when its done, allowing you to work on something else:
+ampersand `&` at the end of your command -- it runs in the background and notifies you when its done, allowi$
 ```
 cp * /tmp/ &
 ```
 
-We can put unintentionally long jobs to the background:  
+We can put unintentionally long jobs to the background:
 
 1. `ctrl-z` suspends the running program
-2. `bg` runs suspended program to the background  
+2. `bg` runs suspended program to the background
+
+The job is automagically disowned and will continue also when exiting shell session.
   
 
 ## Exit a running shell session without stopping running jobs

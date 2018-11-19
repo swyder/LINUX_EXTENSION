@@ -96,4 +96,11 @@ ctrl+r | search history
 
 cowsay "URPP evolution"
 
+### softlinks
+
+ln -s ../scripts/Run_mapping.sh
+ln -s MyLink ../scripts/Runmapping.sh 
+unlink Run_mapping.sh   # Attention, unlink with a regular file deletes it
+  
+split  
 

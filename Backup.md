@@ -8,11 +8,19 @@ Stefan Wyder
 ### Backup
 
 - hard drives crashes are frequent
+- you could accidentally rename, move, reformat or overwrite files, or delete rows
 - Regular backups can save you a lot of work and nerves
 - keep multiple copies at different locations (also off-site)
 - test your backups by restoring them!
-- make sure you know how/how many times your server is backuped
+- make sure you know how your server is backuped
+- ideally different strategies for raw data & scripts >> bulky intermediate files  
 
+## Make files read-only
+
+Read-only files can not accidently be replaced or removed.
+```
+chmod 0444 Example_File  
+```  
 
 ## rsync
 
@@ -31,13 +39,13 @@ sudo rsync -azv /home/path/folder1/ /home/path/folder2
 ```
 
 - `-a` archive mode (same as -rlptgoD)
-  - Descend recursively into all directories (-r),
-  - copy symlinks as symlinks (-l),
-  - preserve file permissions (-p),
-  - preserve modification times (-t),
-  - preserve groups (-g),
-  - preserve file ownership (-o), and
-  - preserve devices as devices (-D). 
+  - Descend recursively into all directories (-r)
+  - **copy symlinks as symlinks (-l)**
+  - preserve file permissions (-p)
+  - preserve modification times (-t)
+  - preserve groups (-g)
+  - preserve file ownership (-o)
+  - preserve devices as devices (-D) 
 - `-z` compresses the data
 - `-v` verbosity of the reporting process  
   
@@ -56,16 +64,41 @@ sudo rsync --dry-run --delete -azv -e ssh /home/path/folder1/ remoteuser@remoteh
 
 ## Backup using tar
 
+`tar` is an incredibly useful tool. Importantly, it keeps the directory structure of your folders, file permissions, etc. You can also compress your files at the same time.  
+  
+This line will create a new tar file example.tar.gz from the folder example_analysis and its subfolders
+```
+tar -czvf example.tar.gz ./example_analysis
+```
+
+- `-c` creates new archive
+- `-z` uses gzip to compress files
+- `-v` verbosely list files being archived
+- `-f` file name
+
+
+  
+  
 Here we backup only specific files and/or file types. For using tar for a system backup see [here](https://help.ubuntu.com/community/BackupYourSystem/TAR)
 
 ```
 datestr=`date '+%Y%m%d%H%M'`
 cd /mnt/HD2/BACKUP/
 find ~ /mnt/HD* -iname "Readme*.txt" | grep -v "/home/wyder/Downloads" > files2Backup
-tar cvz -T files2Backup  -f "Backup_Readmes_"${datestr}".tar.gz"
+tar -cvz -T files2Backup  -f "Backup_Readmes_"${datestr}".tar.gz"
 ```
 
-then copy the tar.gz file onto NAS
+then copy the tar.gz file onto your NAS
+
+## Updating tar
+
+A nice feature of tar is that you can update tar files that you already created (i.e., you can create monthly addendums to your tar files).  
+  
+```
+gunzip example.tar.gz
+tar -uvf example.tar ./new_analysis
+gzip example.tar
+```
 
 
 ## Incremental Backup
@@ -74,7 +107,7 @@ then copy the tar.gz file onto NAS
 ```
 datestr=`date '+%Y%m%d%H%M'`
 cd /mnt/HD2/BACKUP/
-tar czvlf incr_backup-$datestr.tar.gz -X incr_backup.exclude --newer-mtime="8 days ago" ~
+tar -czvlf incr_backup-$datestr.tar.gz -X incr_backup.exclude --newer-mtime="8 days ago" ~
 ```
 
 ### The file incr_backup.exclude contains file types that are very large
